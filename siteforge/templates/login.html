@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login — SiteForge</title>
+<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='logo.svg') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="wrap">
+    <div class="brand">
+        <img src="{{ url_for('static', filename='logo.svg') }}" alt="SiteForge logo" class="logo">
+        <h1>SiteForge</h1>
+    </div>
+    <p class="tagline">Log in to build your website.</p>
+
+    <form method="POST" class="card">
+        <label>Name
+            <input type="text" name="name" placeholder="Your name" required autofocus>
+        </label>
+        <label>Password
+            <input type="password" name="password" placeholder="Enter password" required>
+        </label>
+        {% if error %}
+        <p style="color:#e11d48; font-size:0.9rem;">{{ error }}</p>
+        {% endif %}
+        <button type="submit">Log in</button>
+    </form>
+
+    <p class="switch-link">New here? <a href="{{ url_for('signup') }}">Create an account</a></p>
+</div>
+</body>
+</html>

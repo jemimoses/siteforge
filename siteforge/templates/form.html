@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SiteForge — build your website</title>
+<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='logo.svg') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="wrap">
+    <div class="brand">
+        <img src="{{ url_for('static', filename='logo.svg') }}" alt="SiteForge logo" class="logo">
+        <h1>SiteForge</h1>
+    </div>
+    <p class="tagline">Fill a form. Get a website. Instantly.</p>
+    <p class="hint">Hi {{ user_name }} · <a href="{{ url_for('logout') }}">Log out</a></p>
+
+    <form action="{{ url_for('generate') }}" method="POST" enctype="multipart/form-data" class="card">
+        <label>Site name
+            <input type="text" name="site_name" placeholder="e.g. Aroma Cafe" required>
+        </label>
+
+        <label>Category
+            <input type="text" name="category" placeholder="e.g. Restaurant, Portfolio, Studio">
+        </label>
+
+        <label>Color theme
+            <select name="color_theme">
+                {% for key in themes %}
+                <option value="{{ key }}">{{ key | capitalize }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <h3>Sections</h3>
+        <p class="hint">Tick the sections you want, type your own content, and optionally add up to {{ max_images }} images.</p>
+
+        {% for key in section_keys %}
+        <div class="section-block">
+            <label class="checkbox-label">
+                <input type="checkbox" name="sections" value="{{ key }}">
+                {{ key | capitalize }}
+            </label>
+            <textarea name="content_{{ key }}" placeholder="Write your {{ key }} content here..."></textarea>
+            <input type="file" name="images_{{ key }}" accept="image/*" multiple>
+        </div>
+        {% endfor %}
+
+        <button type="submit">Generate my website</button>
+    </form>
+
+    {% if recent_sites %}
+    <div class="recent">
+        <h3>Recently generated</h3>
+        <div class="recent-grid">
+            {% for site in recent_sites %}
+            <a class="recent-card" href="{{ url_for('preview', site_id=site['id']) }}">
+                <span class="recent-name">{{ site['site_name'] }}</span>
+                <span class="recent-category">{{ site['category'] }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Edit {{ site_name }} — SiteForge</title>
+<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='logo.svg') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="wrap">
+    <div class="brand">
+        <img src="{{ url_for('static', filename='logo.svg') }}" alt="SiteForge logo" class="logo">
+        <h1>Edit your site</h1>
+    </div>
+    <p class="tagline">Update content, theme, or images — changes apply instantly.</p>
+
+    <form action="{{ url_for('edit', site_id=site_id) }}" method="POST" enctype="multipart/form-data" class="card">
+        <label>Site name
+            <input type="text" name="site_name" value="{{ site_name }}" required>
+        </label>
+
+        <label>Category
+            <input type="text" name="category" value="{{ category }}">
+        </label>
+
+        <label>Color theme
+            <select name="color_theme">
+                {% for key in themes %}
+                <option value="{{ key }}" {% if key == color_theme %}selected{% endif %}>{{ key | capitalize }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <h3>Sections</h3>
+        <p class="hint">Tick the sections you want, edit content, and optionally add up to {{ max_images }} images.</p>
+
+        {% for key in section_keys %}
+        <div class="section-block">
+            <label class="checkbox-label">
+                <input type="checkbox" name="sections" value="{{ key }}" {% if key in sections %}checked{% endif %}>
+                {{ key | capitalize }}
+            </label>
+            <textarea name="content_{{ key }}">{{ sections.get(key, "") }}</textarea>
+            {% if images.get(key) %}
+            <div class="existing-images">
+                {% for img in images[key] %}
+                <img src="{{ url_for('static', filename=img) }}" alt="{{ key }} image">
+                {% endfor %}
+            </div>
+            {% endif %}
+            <input type="file" name="images_{{ key }}" accept="image/*" multiple>
+        </div>
+        {% endfor %}
+
+        <button type="submit">Save changes</button>
+    </form>
+</div>
+</body>
+</html>
