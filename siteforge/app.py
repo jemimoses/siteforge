@@ -9,7 +9,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SITEFORGE_SECRET_KEY", "dev-secret-change-this")
-DB_PATH = "siteforge.db"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "siteforge.db")
+
 UPLOAD_FOLDER = os.path.join("static", "uploads")
 ALLOWED_EXT = {"png", "jpg", "jpeg", "gif", "webp"}
 MAX_IMAGES_PER_SECTION = 5
