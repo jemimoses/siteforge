@@ -1,3 +1,5 @@
+import sys
+sys.setrecursionlimit(3000)
 import os
 import sqlite3
 import json
