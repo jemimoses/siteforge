@@ -20,6 +20,18 @@ python app.py
 
 Then open `http://localhost:5000` in your browser.
 
+## Deploy (free hosting)
+
+The repo ships with a `Procfile` (gunicorn) and reads `PORT` / `SITEFORGE_SECRET_KEY` from the environment, so it deploys as-is.
+
+> **Heads-up:** the app lives in the `siteforge/` subfolder of this repo. In Render, set **Root Directory** to `siteforge` so the build finds `requirements.txt` and the `Procfile`.
+
+**Render** — push the repo to GitHub, then create a **Web Service** pointing at it. Build command: `pip install -r requirements.txt`, start command: `gunicorn app:app --bind 0.0.0.0:$PORT --workers 2`. Add `SITEFORGE_SECRET_KEY` (a long random string) under Environment.
+
+**Railway** — create a project from the GitHub repo; it detects the Procfile automatically. Add `SITEFORGE_SECRET_KEY` under Variables.
+
+⚠️ **Note on SQLite & uploaded images:** both live on the host's disk, so they reset on redeploy/scale on free tiers. Fine for demos; use a managed database + object storage for anything permanent.
+
 ## How it works
 1. `/` — the form where a user names their site, picks a category, a color
    theme, and fills in content for the sections they want.

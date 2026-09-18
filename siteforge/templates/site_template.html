@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ site_name }}</title>
 <style>
     :root {
@@ -10,98 +11,201 @@
         --dark: {{ theme.dark }};
     }
     * { box-sizing: border-box; }
+
     body {
         margin: 0;
-        font-family: system-ui, sans-serif;
-        color: #1f2937;
-        background: #fafafa;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        color: #e7eaf3;
+        background-color: #0b1020;
+        background:
+            radial-gradient(1000px 600px at 12% -8%, color-mix(in srgb, var(--primary) 26%, transparent) 0%, transparent 55%),
+            radial-gradient(900px 550px at 108% 15%, color-mix(in srgb, var(--dark) 55%, transparent) 0%, transparent 60%),
+            linear-gradient(180deg, color-mix(in srgb, var(--dark) 38%, #0b1020), #0b1020 65%);
+        background-attachment: fixed;
+        min-height: 100vh;
     }
-    header {
+
+    /* Soft floating glow tinted with the site's theme */
+    .glow {
+        position: fixed;
+        width: 44vmax;
+        height: 44vmax;
+        border-radius: 50%;
+        background: var(--primary);
+        filter: blur(110px);
+        opacity: 0.16;
+        z-index: -1;
+        pointer-events: none;
+        animation: drift 30s ease-in-out infinite alternate;
+    }
+    .glow.g2 {
         background: var(--dark);
-        color: white;
-        padding: 60px 20px;
-        text-align: center;
-        position: relative;
+        opacity: 0.3;
+        top: auto;
+        bottom: -20%;
+        left: auto;
+        right: -14%;
+        animation-duration: 38s;
+        animation-delay: -12s;
     }
-    header h1 { margin: 0 0 8px; font-size: 2.2rem; }
-    header p { margin: 0; opacity: 0.85; }
+    @keyframes drift {
+        from { transform: translate(0, 0) scale(1); }
+        to   { transform: translate(7vw, 6vh) scale(1.18); }
+    }
+
+    header {
+        position: relative;
+        padding: 96px 20px 72px;
+        text-align: center;
+        overflow: hidden;
+    }
+    header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--primary) 16%, transparent), transparent);
+        pointer-events: none;
+    }
+    header h1 {
+        margin: 0 0 10px;
+        font-size: clamp(2.2rem, 6vw, 3.4rem);
+        letter-spacing: -0.02em;
+        background: linear-gradient(90deg, #fff, color-mix(in srgb, var(--primary) 55%, #ffffff));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: rise 0.7s ease both;
+    }
+    header p {
+        margin: 0;
+        opacity: 0.75;
+        font-size: 1.05rem;
+        animation: rise 0.7s 0.08s ease both;
+    }
+    @keyframes rise {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
     .edit-link {
         position: absolute;
-        top: 16px;
+        top: 18px;
         right: 20px;
-        color: white;
-        font-size: 0.8rem;
-        opacity: 0.7;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.82rem;
         text-decoration: none;
-        border: 1px solid rgba(255,255,255,0.4);
-        padding: 4px 10px;
-        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.06);
+        padding: 6px 12px;
+        border-radius: 8px;
+        transition: background 0.15s ease, border-color 0.15s ease;
     }
-    .edit-link:hover { opacity: 1; }
-    section {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 50px 24px;
-        border-bottom: 1px solid #e5e7eb;
-    }
-    section h2 {
-        color: var(--primary);
-        text-transform: capitalize;
-        margin-top: 0;
-    }
-    section p { line-height: 1.7; white-space: pre-wrap; }
-    section img {
-        max-width: 100%;
-        border-radius: 10px;
-        margin-bottom: 16px;
-        display: block;
-    }
-    .img-gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 10px;
-        margin-bottom: 16px;
-    }
-    .img-gallery img {
-        width: 100%;
-        height: 140px;
-        object-fit: cover;
-        border-radius: 10px;
-        margin-bottom: 0;
-    }
-    .single-img {
-        width: 100%;
-        max-height: 380px;
-        object-fit: cover;
-        border-radius: 10px;
-        margin-bottom: 16px;
-        display: block;
-    }
-    footer {
-        text-align: center;
-        padding: 24px;
-        font-size: 0.85rem;
-        color: #9ca3af;
-    }
+    .edit-link:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.45); }
+
     .badge {
-        display: inline-block;
-        background: var(--light);
-        color: var(--dark);
-        padding: 4px 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 22px;
+        padding: 6px 14px;
         border-radius: 999px;
         font-size: 0.8rem;
+        color: color-mix(in srgb, var(--primary) 60%, #ffffff);
+        background: color-mix(in srgb, var(--primary) 14%, transparent);
+        border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
+        animation: rise 0.7s 0.16s ease both;
+    }
+    .badge img { width: 14px; height: 14px; border-radius: 4px; }
+
+    main { max-width: 820px; margin: 0 auto; padding: 20px 20px 60px; }
+
+    section {
+        background: rgba(255, 255, 255, 0.045);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 18px;
+        padding: 34px;
+        margin-bottom: 22px;
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow: 0 18px 50px rgba(2, 6, 23, 0.35);
+        animation: rise 0.6s ease both;
+    }
+    section:nth-child(1) { animation-delay: 0.05s; }
+    section:nth-child(2) { animation-delay: 0.12s; }
+    section:nth-child(3) { animation-delay: 0.19s; }
+    section:nth-child(4) { animation-delay: 0.26s; }
+    section:nth-child(5) { animation-delay: 0.33s; }
+
+    section h2 {
+        margin: 0 0 14px;
+        color: color-mix(in srgb, var(--primary) 62%, #ffffff);
+        text-transform: capitalize;
+        font-size: 1.5rem;
+        letter-spacing: -0.01em;
+    }
+    section h2::after {
+        content: "";
+        display: block;
+        width: 42px;
+        height: 3px;
         margin-top: 10px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--primary), transparent);
+    }
+    section p { line-height: 1.75; white-space: pre-wrap; margin: 0; color: #cdd4e4; }
+
+    .img-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+    .img-gallery img,
+    .single-img {
+        width: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .img-gallery img { height: 150px; }
+    .single-img { max-height: 400px; margin-bottom: 18px; }
+    .img-gallery img:hover, .single-img:hover {
+        transform: translateY(-3px) scale(1.01);
+        box-shadow: 0 14px 34px color-mix(in srgb, var(--primary) 30%, transparent);
+    }
+
+    footer {
+        text-align: center;
+        padding: 28px 20px 40px;
+        font-size: 0.85rem;
+        color: #7c86a0;
+    }
+    footer a { color: color-mix(in srgb, var(--primary) 65%, #ffffff); text-decoration: none; font-weight: 600; }
+
+    @media (max-width: 560px) {
+        header { padding: 70px 16px 50px; }
+        section { padding: 24px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .glow, header h1, header p, .badge, section { animation: none; }
     }
 </style>
 </head>
 <body>
+<div class="glow" aria-hidden="true"></div>
+<div class="glow g2" aria-hidden="true"></div>
+
 <header>
     {% if is_owner %}<a class="edit-link" href="{{ url_for('edit', site_id=site_id) }}">Edit this site</a>{% endif %}
     <h1>{{ site_name }}</h1>
     <p>{{ category }}</p>
-    <span class="badge"><img src="{{ url_for('static', filename='logo.svg') }}" alt="" style="width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:4px;">Built with SiteForge</span>
+    <span class="badge">
+        <img src="{{ url_for('static', filename='logo.svg') }}" alt="">Built with SiteForge
+    </span>
 </header>
 
+<main>
 {% for key in section_order %}
     {% if key in sections %}
     <section>
@@ -121,7 +225,10 @@
     </section>
     {% endif %}
 {% endfor %}
+</main>
 
-<footer>Generated instantly by SiteForge — no code required.</footer>
+<footer>
+    Generated instantly by <a href="{{ url_for('login') }}">SiteForge</a> — no code required.
+</footer>
 </body>
 </html>

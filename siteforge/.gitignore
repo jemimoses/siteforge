@@ -3,3 +3,4 @@ __pycache__/
 siteforge.db
 .venv/
 venv/
+server.log
